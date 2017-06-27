@@ -7,7 +7,7 @@ This README file contins notes written down during this dangerous and exciting a
 
 # Milestones
 
-* create a **simple React app**
+* (done) create a **simple React app**
 	* app should be sa simple counter
 	* the single component should be a button with
 * add Redux to the mix
