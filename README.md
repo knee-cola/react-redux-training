@@ -7,17 +7,17 @@ This README file contins notes written down during this dangerous and exciting a
 ead. Long Live Composition
 # Milestones
 
-* **(done)** createntational and Container Components a **simple React app**
+* 1st **(done)** createntational and Container Components a **simple React app**
 	* app should be sa simple counter
 	* the single component should be a button with
-* **(done)** add Redux to the mix
+* 2nd **(done)** add Redux to the mix
 	* move state from the component into the Redux Store
-* **(done)** expand the Redux solution to support multiple counters
+* 3rd **(done)** expand the Redux solution to support multiple counters
 	* only one counter button should be visible at the time
 	* user should be able to select the active counter via the NavBar at the bottom
-* **(done)** add support for adding new counters
+* 4th **(done)** add support for adding new counters
 	* the footer should contain a "+" button via which the user can add new counters to the mix 
-* add Router to the mix
+* 5th add Router to the mix
 	* the app should have multiple counters: "A", "B", "C"
 	* each counter should be accessible via a separate route
 	* add a new Navbar component via which the user can change the route
