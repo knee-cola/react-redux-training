@@ -7,12 +7,16 @@ import ReactDOM from 'react-dom';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import counterReducer from './reducers';
-import CounterButton from './components/counter-button';
+import Counter from './containers/counter-container';
+import Footer from './containers/footer-container';
 
 const store = createStore(counterReducer);
 
 ReactDOM.render(
 	<Provider store={store}>
-		<CounterButton />
+		<div>
+			<Counter />
+			<Footer />
+		</div>
 	</Provider>,
 	document.getElementById('root'));

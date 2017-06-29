@@ -12,9 +12,11 @@ ead. Long Live Composition
 	* the single component should be a button with
 * **(done)** add Redux to the mix
 	* move state from the component into the Redux Store
-* expand the Redux solution to support multiple counters
+* **(done)** expand the Redux solution to support multiple counters
 	* only one counter button should be visible at the time
 	* user should be able to select the active counter via the NavBar at the bottom
+* add support for adding new counters
+	* the footer should contain a "+" button via which the user can add new counters to the mix 
 * add Router to the mix
 	* the app should have multiple counters: "A", "B", "C"
 	* each counter should be accessible via a separate route
