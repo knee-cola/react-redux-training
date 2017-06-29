@@ -1,21 +1,34 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import incrementCounter from '../actions'
 
-export default class CounterButton extends React.Component {
+const CounterButton = ({onClick, label, count}) => (
+	<button onClick={onClick}>{label}={count}</button>
+);
 
-	constructor(props, context) {
-		super(props, context);
-
-		this.state = {
-		  count:0
-		};
-	}
-
-	render() {
-		return(<button onClick={this.handleClick.bind(this)}>{this.props.label}={this.state.count}</button>);
-	}
-	
-	handleClick() {
-		this.setState({count:this.state.count+1});
-	}
+CounterButton.propTypes = {
+  onClick: PropTypes.func.isRequired,
+  label: PropTypes.string.isRequired,
+  count: PropTypes.number.isRequired 
 }
+
+const mapStateToProps = state => {
+  return {
+    label: state.label,
+    count: state.count
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    onClick: id => {
+      dispatch(incrementCounter())
+    }
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(CounterButton);

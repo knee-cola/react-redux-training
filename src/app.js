@@ -4,12 +4,15 @@ require('./app.scss');
 
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
+import counterReducer from './reducers';
 import CounterButton from './components/counter-button';
 
-ReactDOM.render(
-	<div>
-		<CounterButton label="A" />
-	</div>,
-	document.getElementById('root'));
+const store = createStore(counterReducer);
 
-console.log(123);
+ReactDOM.render(
+	<Provider store={store}>
+		<CounterButton />
+	</Provider>,
+	document.getElementById('root'));
