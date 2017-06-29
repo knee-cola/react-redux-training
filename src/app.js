@@ -15,8 +15,8 @@ const store = createStore(counterReducer);
 ReactDOM.render(
 	<Provider store={store}>
 		<div>
-			<Counter />
 			<Footer />
+			<Counter />
 		</div>
 	</Provider>,
 	document.getElementById('root'));

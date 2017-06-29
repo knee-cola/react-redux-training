@@ -7,4 +7,9 @@ const setActiveCounter = (counterID) => ({
 	counterID: counterID
 });
 
-export { incrementCounter, setActiveCounter };
+const addCounter = () => ({
+	type: 'ADD_COUNTER'
+});
+
+
+export { incrementCounter, setActiveCounter, addCounter };

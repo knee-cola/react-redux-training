@@ -5,7 +5,7 @@ import { incrementCounter } from '../actions'
 import Counter from '../components/counter'
 
 const mapStateToProps = state => {
-  return Object.assign({}, state.counters[state.activeIx]);
+  return state.activeIx===-1 ? {counterID:'', count:0} : state.counters[state.activeIx];
 }
 
 const mapDispatchToProps = dispatch => {
