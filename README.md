@@ -7,7 +7,7 @@ This README file contins notes written down during this dangerous and exciting a
 ead. Long Live Composition
 # Milestones
 
-* 1st **(done)** createntational and Container Components a **simple React app**
+* 1st **(done)** create a **simple React app**
 	* app should be sa simple counter
 	* the single component should be a button with
 * 2nd **(done)** add Redux to the mix
