@@ -7,6 +7,8 @@ This README file contins notes written down during this dangerous and exciting a
 ead. Long Live Composition
 # Milestones
 
+All milestones are commited to Git as separate commits, which means that each version can checked-out.
+
 * 1st **(done)** create a **simple React app**
 	* app should be sa simple counter
 	* the single component should be a button with
