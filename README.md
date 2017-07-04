@@ -36,3 +36,85 @@ The following documentation was studied during the execution of this training:
 Here's a list of articles which might be interesting to read:
 
 * [Getting Started with Redux](https://egghead.io/courses/getting-started-with-redux) - video tutorial series
+
+# Notes
+## Redux Async Operations & Thunk Middleware
+
+Source: (Redux Async Actions)[http://redux.js.org/docs/basics/Actions.html]
+
+The standard way an React application events work is:
+
+* a DOM event handler function creates a new object by calling an action creator function
+* the same event handler function then dispatches the new action via the dispatch ``method``
+* React picks up the dispatched action and calls the reducer function
+* reducer function returns the new Redux state
+* React re-draws all the components
+
+As we can see, in standard event-flow there's no room for event async events. All the processing is done right away!
+
+In order to support async operations we need solve two problems:
+
+* where to put the code which will trigger the async operation
+* how to run a new action once the async operation has finished
+
+The answer to both of these questions is: all of this is done from an new type of action creator function called **thunk**.
+
+Regular action creation functions usually doesn't contain any logic - their job is to create and return a new action object.
+
+Thunk action creator functions, instead of creating of returning a new action object, return a **new function**. There are two important sacts about this new function:
+
+* it defines a new API, which is different from the one regular action creator function use
+	* it has a single param ``dispatch``, through which it's passed the refference to the dispatch function
+	* it returns a promise
+* the function contains logic, which starts the async operation and attaches event handlers
+* the event handlers defined within a thunk are called when the async operation is done
+	* event handlers create a new action related to the finished async operation (by calling an action creator function)
+	* event handlers dispatch the new action via provided ``dispatch`` function (passed as the argument to the thunk function)
+
+Here's an example of a thunk action creator:
+
+	// this is a thunk action creator
+	export function doSomeAsyncOperation() {
+
+		// returning a function, which will be called from action creator
+	  	return function (dispatch) {
+
+			window.setTimeout(() => {
+
+				// dispatching a regular action
+				dispatch(showResult(subreddit, json))
+
+			}, 1000);
+	  }
+	}
+
+	/ this is a regular action creator
+	export function showResult() {
+		// returning a new action object
+		return {
+			type: "SHOW_RESULTS",
+			text
+		}
+	}
+
+
+Since Redux expects that action creators return an action object, we need to extend it's function by adding a ``redux-thunk`` middleware to the mix:
+
+	import thunkMiddleware from 'redux-thunk'
+	import { createStore, applyMiddleware } from 'redux'
+
+	const store = createStore(
+		rootReducer,
+		applyMiddleware(
+			thunkMiddleware
+  		)
+	);
+
+Starting of an async action is no different than starting regular one: simplay call the thunk function and dispatch it's result:
+
+	dispatch(doSomeAsyncOperation());
+
+
+# ToDo
+
+Continue reading the http://redux.js.org/docs/advanced/UsageWithReactRouter.html#reading-from-the-url
