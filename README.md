@@ -40,7 +40,12 @@ Here's a list of articles which might be interesting to read:
 # Notes
 ## Redux Async Operations & Thunk Middleware
 
-Source: (Redux Async Actions)[http://redux.js.org/docs/basics/Actions.html]
+Sources:
+
+* [Redux Async Actions](http://redux.js.org/docs/basics/Actions.html)
+* [Redux Middleware Tutorial - Redux Tutorial #5](https://www.youtube.com/watch?v=DJ8fR0mZM44)
+* [Redux Async Actions - Redux Tutorial #6](https://www.youtube.com/watch?v=Td-2D-_7Y2E)
+* [How to dispatch a Redux action with a timeout?](https://stackoverflow.com/questions/35411423/how-to-dispatch-a-redux-action-with-a-timeout/35415559#35415559)
 
 The standard way an React application events work is:
 
@@ -114,6 +119,9 @@ Starting of an async action is no different than starting regular one: simplay c
 
 	dispatch(doSomeAsyncOperation());
 
+For more advanced use cases of async operation one shoud consider using the following middleware:
+* [Redux Saga](https://github.com/redux-saga/redux-saga)
+* [Redux Loop](https://github.com/redux-loop/redux-loop)
 
 # ToDo
 
