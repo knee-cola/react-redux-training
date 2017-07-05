@@ -38,6 +38,50 @@ Here's a list of articles which might be interesting to read:
 * [Getting Started with Redux](https://egghead.io/courses/getting-started-with-redux) - video tutorial series
 
 # Notes
+## Redux Middleware
+
+Middleware is a way to tap into the action processing pipeline. Actions are processed in the following stages:
+
+* a new action is crated via action creator (function)
+* action is dispatched via ``store.dispatch``
+* processing is handed over to middleware (if one exists)
+* Redux calls all registered reducers
+* UI gets re-drawn
+
+Middleware is just a simple function, which is called whenever an action is dispatched. The following block shows what middleware API looks like:
+
+```javascript
+	// [state] = refference to state object
+	function genericMiddlewareFunction(state) {
+
+		// [next] = the next middleware function,
+		// which needs be called in order for the
+		// processing to continue - we can terminate
+		// action processing by not calling it
+ 		return function(next) {
+
+			// [action] = action which was dispatched
+			return function(action) {
+
+				// here goes the middleware code
+
+			}
+		}
+	}
+```
+
+The following code block shows how to registrate a middleware:
+```javascript
+	import { createStore, applyMiddleware } from 'redux'
+
+	const store = createStore(
+		rootReducer,
+		applyMiddleware(
+			genericMiddlewareFunction
+  		)
+	);
+```
+
 ## Redux Async Operations & Thunk Middleware
 
 Sources:
@@ -78,6 +122,7 @@ Thunk action creator functions, instead of creating of returning a new action ob
 
 Here's an example of a thunk action creator:
 
+```javascript
 	// this is a thunk action creator
 	export function doSomeAsyncOperation() {
 
@@ -101,10 +146,11 @@ Here's an example of a thunk action creator:
 			text
 		}
 	}
-
+```
 
 Since Redux expects that action creators return an action object, we need to extend it's function by adding a ``redux-thunk`` middleware to the mix:
 
+```javascript
 	import thunkMiddleware from 'redux-thunk'
 	import { createStore, applyMiddleware } from 'redux'
 
@@ -114,15 +160,16 @@ Since Redux expects that action creators return an action object, we need to ext
 			thunkMiddleware
   		)
 	);
+```
 
 Starting of an async action is no different than starting regular one: simplay call the thunk function and dispatch it's result:
 
+```javascript
 	dispatch(doSomeAsyncOperation());
+```
 
 For more advanced use cases of async operation one shoud consider using the following middleware:
 * [Redux Saga](https://github.com/redux-saga/redux-saga)
 * [Redux Loop](https://github.com/redux-loop/redux-loop)
 
 # ToDo
-
-Continue reading the http://redux.js.org/docs/advanced/UsageWithReactRouter.html#reading-from-the-url
