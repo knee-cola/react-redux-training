@@ -175,7 +175,7 @@ For more advanced use cases of async operation one shoud consider using the foll
 
 ## Immutable Data
 
-**Source:** (Immutable Data @ Redux)[http://redux.js.org/docs/faq/ImmutableData.html]
+**Source:** [Immutable Data @ Redux](http://redux.js.org/docs/faq/ImmutableData.html)
 
 Redux & React detect changes on objects by doing a shallow compare (by comparing references).
 In order for a change of an object be detactable, instead of changing the object directly we duplicate the object and then make change on the copy.
@@ -223,54 +223,53 @@ JavaScript doesnt support immutability out of the box. Instead, whenever we want
 Here's an example:
 
 ```javascript
+var store = {
+	car: {
+		brand: 'BMW',
+		color: 'white'
+	}
+};
 
-	var store = {
-		car: {
-			brand: 'BMW',
-			color: 'white'
-		}
+
+function myReducer(store) {
+
+	// creating a duplicate - here we assure the immutability
+	var carCopy = {
+		brand: store.car.brand,
+		color: store.car.color
 	};
 
-
-	function myReducer(store) {
-
-		// creating a duplicate - here we assure the immutability
-		var carCopy = {
-			brand: store.car.brand,
-			color: store.car.color
-		};
-
-		// mutating the duplicate - here we change the data
-		carCopy.color = 'red';
-		
-		return({
-				car: carCopy
-			});
-	};
+	// mutating the duplicate - here we change the data
+	carCopy.color = 'red';
+	
+	return({
+			car: carCopy
+		});
+};
 ```
 
-The task of assuring immutability can be made a bit easier by using libraries such as (Immutable.js)[https://github.com/facebook/immutable-js]
+The task of assuring immutability can be made a bit easier by using libraries such as [Immutable.js](https://github.com/facebook/immutable-js)
 
 If we apply Immutable.js to the previous example, we get the following:
 
 ```javascript
-	var store = {
-		car: Immutable.Map({
-			brand: 'BMW',
-			color: 'white'
-		})
-	};
+var store = {
+	car: Immutable.Map({
+		brand: 'BMW',
+		color: 'white'
+	})
+};
 
-	function myReducer(store) {
-		return({
-				car: store.car.set('color', 'white') // [set] method returns a new copy of an object
-			});
-	};
+function myReducer(store) {
+	return({
+			car: store.car.set('color', 'white') // [set] method returns a new copy of an object
+		});
+};
 ```
 
 ### Immutability pitfalls and anti-patterns
 
-**Sources:** (React.js pure render performance anti-pattern)[https://medium.com/@esamatti/react-js-pure-render-performance-anti-pattern-fb88c101332f]
+**Sources:** [React.js pure render performance anti-pattern](https://medium.com/@esamatti/react-js-pure-render-performance-anti-pattern-fb88c101332f)
 
 Since React heavily relies on shallow equality checks, we need to be extra carefull **not to create new object instances** when they aren't neccecery. This is especially true in functions along the store > renderer pipeline, such as:
 
@@ -294,13 +293,13 @@ class Table extends PureComponent {
 }
 ```
 
-To fix this problem we need to create one shared instance on empty array, which is reused each time the ``render`` function is called. The fixed source can be found at (React.js pure render performance anti-pattern)[https://medium.com/@esamatti/react-js-pure-render-performance-anti-pattern-fb88c101332f]
+To fix this problem we need to create one shared instance on empty array, which is reused each time the ``render`` function is called. The fixed source can be found at [React.js pure render performance anti-pattern](https://medium.com/@esamatti/react-js-pure-render-performance-anti-pattern-fb88c101332f)
 
 Things to remember:
 
 * use (autobind-decorator)[https://www.npmjs.com/package/] to automatically bind methods to instance
-	* use (jsx-no-bind esLint plugin)[https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-no-bind.md] to detect bad practices via build tool
-* use memoization in ``mapStateToProps`` function (i.e. via (Reselect)[https://github.com/reactjs/reselect])
+	* use [jsx-no-bind esLint plugin](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-no-bind.md) to detect bad practices via build tool
+* use memoization in ``mapStateToProps`` function (i.e. via [Reselect](https://github.com/reactjs/reselect))
 
 
 # ToDo
