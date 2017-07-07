@@ -36,6 +36,7 @@ The following documentation was studied during the execution of this training:
 Here's a list of articles which might be interesting to read:
 
 * [Getting Started with Redux](https://egghead.io/courses/getting-started-with-redux) - video tutorial series
+* [The case for Flux](https://medium.com/swlh/the-case-for-flux-379b7d1982c6) - explaining the benefits of Flux style of managing data (applicable also to Redux)
 
 # Notes
 ## Redux Middleware
@@ -51,35 +52,35 @@ Middleware is a way to tap into the action processing pipeline. Actions are proc
 Middleware is just a simple function, which is called whenever an action is dispatched. The following block shows what middleware API looks like:
 
 ```javascript
-	// [state] = refference to state object
-	function genericMiddlewareFunction(state) {
+// [state] = refference to state object
+function genericMiddlewareFunction(state) {
 
-		// [next] = the next middleware function,
-		// which needs be called in order for the
-		// processing to continue - we can terminate
-		// action processing by not calling it
- 		return function(next) {
+	// [next] = the next middleware function,
+	// which needs be called in order for the
+	// processing to continue - we can terminate
+	// action processing by not calling it
+		return function(next) {
 
-			// [action] = action which was dispatched
-			return function(action) {
+		// [action] = action which was dispatched
+		return function(action) {
 
-				// here goes the middleware code
+			// here goes the middleware code
 
-			}
 		}
 	}
+}
 ```
 
 The following code block shows how to registrate a middleware:
 ```javascript
-	import { createStore, applyMiddleware } from 'redux'
+import { createStore, applyMiddleware } from 'redux'
 
-	const store = createStore(
-		rootReducer,
-		applyMiddleware(
-			genericMiddlewareFunction
-  		)
-	);
+const store = createStore(
+	rootReducer,
+	applyMiddleware(
+		genericMiddlewareFunction
+		)
+);
 ```
 
 ## Redux Async Operations & Thunk Middleware
@@ -99,7 +100,7 @@ The standard way an React application events work is:
 * reducer function returns the new Redux state
 * React re-draws all the components
 
-As we can see, in standard event-flow there's no room for event async events. All the processing is done right away!
+As we can see, in [standard event-flow](http://redux.js.org/docs/basics/DataFlow.html) there's no room for event async events. All the processing is done right away!
 
 In order to support async operations we need solve two problems:
 
@@ -123,53 +124,193 @@ Thunk action creator functions, instead of creating of returning a new action ob
 Here's an example of a thunk action creator:
 
 ```javascript
-	// this is a thunk action creator
-	export function doSomeAsyncOperation() {
+// this is a thunk action creator
+export function doSomeAsyncOperation() {
 
-		// returning a function, which will be called from action creator
-	  	return function (dispatch) {
+	// returning a function, which will be called from action creator
+  	return function (dispatch) {
 
-			window.setTimeout(() => {
+		window.setTimeout(() => {
 
-				// dispatching a regular action
-				dispatch(showResult(subreddit, json))
+			// dispatching a regular action
+			dispatch(showResult(subreddit, json))
 
-			}, 1000);
-	  }
+		}, 1000);
+  }
+}
+
+/ this is a regular action creator
+export function showResult() {
+	// returning a new action object
+	return {
+		type: "SHOW_RESULTS",
+		text
 	}
-
-	/ this is a regular action creator
-	export function showResult() {
-		// returning a new action object
-		return {
-			type: "SHOW_RESULTS",
-			text
-		}
-	}
+}
 ```
 
 Since Redux expects that action creators return an action object, we need to extend it's function by adding a ``redux-thunk`` middleware to the mix:
 
 ```javascript
-	import thunkMiddleware from 'redux-thunk'
-	import { createStore, applyMiddleware } from 'redux'
+import thunkMiddleware from 'redux-thunk'
+import { createStore, applyMiddleware } from 'redux'
 
-	const store = createStore(
-		rootReducer,
-		applyMiddleware(
-			thunkMiddleware
-  		)
-	);
+const store = createStore(
+	rootReducer,
+	applyMiddleware(
+		thunkMiddleware
+		)
+);
 ```
 
 Starting of an async action is no different than starting regular one: simplay call the thunk function and dispatch it's result:
 
 ```javascript
-	dispatch(doSomeAsyncOperation());
+dispatch(doSomeAsyncOperation());
 ```
 
 For more advanced use cases of async operation one shoud consider using the following middleware:
 * [Redux Saga](https://github.com/redux-saga/redux-saga)
 * [Redux Loop](https://github.com/redux-loop/redux-loop)
 
+## Immutable Data
+
+**Source:** (Immutable Data @ Redux)[http://redux.js.org/docs/faq/ImmutableData.html]
+
+Redux & React detect changes on objects by doing a shallow compare (by comparing references).
+In order for a change of an object be detactable, instead of changing the object directly we duplicate the object and then make change on the copy.
+Redux will know that the object has changed by comparing the reference to the original object with the reference to the new object. Since objects are not the same, Redux will conclude that something has changed.
+
+The following snippet shows how this works:
+
+
+```javascript
+	var store = {
+		originalObj: {
+			a: 5,
+			b: 6
+		}
+	};
+
+	function myReducer(store) {
+		// creating a duplicate
+		var objCopy = {
+			a: store.originalObj.a,
+			b: store.originalObj.b
+		};
+
+		// mutating the duplicate
+		objCopy.a = 100;
+		
+		return({
+				originalObj: objCopy
+			});
+	};
+
+	// calling the reducer
+	var newStore = myReducer(store);
+
+	// detecting changes
+	if(newStore.originalObj !== store.originalObj) {
+		// ... here we implement some logic which handles the changes
+	}
+}
+```
+### Immutable is hard in JS
+
+JavaScript doesnt support immutability out of the box. Instead, whenever we want to change some data in the store, we need to **take great care** to do it the immutable way. This produces a lot of boilerplate code, who's only purpose tu assure immutability.
+
+Here's an example:
+
+```javascript
+
+	var store = {
+		car: {
+			brand: 'BMW',
+			color: 'white'
+		}
+	};
+
+
+	function myReducer(store) {
+
+		// creating a duplicate - here we assure the immutability
+		var carCopy = {
+			brand: store.car.brand,
+			color: store.car.color
+		};
+
+		// mutating the duplicate - here we change the data
+		carCopy.color = 'red';
+		
+		return({
+				car: carCopy
+			});
+	};
+```
+
+The task of assuring immutability can be made a bit easier by using libraries such as (Immutable.js)[https://github.com/facebook/immutable-js]
+
+If we apply Immutable.js to the previous example, we get the following:
+
+```javascript
+	var store = {
+		car: Immutable.Map({
+			brand: 'BMW',
+			color: 'white'
+		})
+	};
+
+	function myReducer(store) {
+		return({
+				car: store.car.set('color', 'white') // [set] method returns a new copy of an object
+			});
+	};
+```
+
+### Immutability pitfalls and anti-patterns
+
+**Sources:** (React.js pure render performance anti-pattern)[https://medium.com/@esamatti/react-js-pure-render-performance-anti-pattern-fb88c101332f]
+
+Since React heavily relies on shallow equality checks, we need to be extra carefull **not to create new object instances** when they aren't neccecery. This is especially true in functions along the store > renderer pipeline, such as:
+
+* mapStateToProps function
+* mapDispatchToProps function
+* render function itself
+
+In following example a new Array object is created each time the ``render`` method is called (as long the ``options`` is ``undefined``), which causes the component to be re-rendered, although nothing ha changes.
+
+```javascript
+class Table extends PureComponent {
+  render() {
+    return (
+      <div>
+        {this.props.items.map(i =>
+          <Cell data={i} options={this.props.options || []} />
+         )}
+       </div>
+     );
+  }
+}
+```
+
+To fix this problem we need to create one shared instance on empty array, which is reused each time the ``render`` function is called. The fixed source can be found at (React.js pure render performance anti-pattern)[https://medium.com/@esamatti/react-js-pure-render-performance-anti-pattern-fb88c101332f]
+
+Things to remember:
+
+* use (autobind-decorator)[https://www.npmjs.com/package/] to automatically bind methods to instance
+	* use (jsx-no-bind esLint plugin)[https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-no-bind.md] to detect bad practices via build tool
+* use memoization in ``mapStateToProps`` function (i.e. via (Reselect)[https://github.com/reactjs/reselect])
+
+
 # ToDo
+
+Read the following:
+* http://reactkungfu.com/2015/08/pros-and-cons-of-using-immutability-with-react-js/
+* https://auth0.com/blog/intro-to-immutable-js/
+* http://redux.js.org/docs/recipes/reducers/ImmutableUpdatePatterns.html
+
+
+* continue the tutorial from
+	* http://redux.js.org/docs/faq/ImmutableData.html
+	* http://redux.js.org/docs/recipes/StructuringReducers.html
