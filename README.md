@@ -175,7 +175,11 @@ For more advanced use cases of async operation one shoud consider using the foll
 
 ## Immutable Data
 
-**Source:** [Immutable Data @ Redux](http://redux.js.org/docs/faq/ImmutableData.html)
+**Sources:**
+* [Immutable Data @ Redux](http://redux.js.org/docs/faq/ImmutableData.html)
+* [Pros and Cons of using immutability with React.js](http://reactkungfu.com/2015/08/pros-and-cons-of-using-immutability-with-react-js/) - beginners introduction to immutability in React
+* [Intro to immutable-js](https://auth0.com/blog/intro-to-immutable-js/) - a lengthy text advanced text about all the implications of using immutable data structures (wastly expands the info given by Redux pages)
+* [Immutable Update Patterns](http://redux.js.org/docs/recipes/reducers/ImmutableUpdatePatterns.html)
 
 Redux & React detect changes on objects by doing a shallow compare (by comparing references).
 In order for a change of an object be detactable, instead of changing the object directly we duplicate the object and then make change on the copy.
@@ -185,35 +189,34 @@ The following snippet shows how this works:
 
 
 ```javascript
-	var store = {
-		originalObj: {
-			a: 5,
-			b: 6
-		}
-	};
-
-	function myReducer(store) {
-		// creating a duplicate
-		var objCopy = {
-			a: store.originalObj.a,
-			b: store.originalObj.b
-		};
-
-		// mutating the duplicate
-		objCopy.a = 100;
-		
-		return({
-				originalObj: objCopy
-			});
-	};
-
-	// calling the reducer
-	var newStore = myReducer(store);
-
-	// detecting changes
-	if(newStore.originalObj !== store.originalObj) {
-		// ... here we implement some logic which handles the changes
+var store = {
+	originalObj: {
+		a: 5,
+		b: 6
 	}
+};
+
+function myReducer(store) {
+	// creating a duplicate
+	var objCopy = {
+		a: store.originalObj.a,
+		b: store.originalObj.b
+	};
+
+	// mutating the duplicate
+	objCopy.a = 100;
+	
+	return({
+			originalObj: objCopy
+		});
+};
+
+// calling the reducer
+var newStore = myReducer(store);
+
+// detecting changes
+if(newStore.originalObj !== store.originalObj) {
+	// ... here we implement some logic which handles the changes
 }
 ```
 ### Immutable is hard in JS
@@ -297,19 +300,136 @@ To fix this problem we need to create one shared instance on empty array, which 
 
 Things to remember:
 
-* use (autobind-decorator)[https://www.npmjs.com/package/] to automatically bind methods to instance
+* use [autobind-decorator](https://www.npmjs.com/package/) to automatically bind methods to instance
 	* use [jsx-no-bind esLint plugin](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-no-bind.md) to detect bad practices via build tool
 * use memoization in ``mapStateToProps`` function (i.e. via [Reselect](https://github.com/reactjs/reselect))
+
+### Immutable.js best practices
+
+**Sources:** [Using Immutable JS](http://redux.js.org/docs/recipes/UsingImmutableJS.html)
+
+* the whole state three shoule be na Immutable.js object
+* state shouldn't contain only immutable objects
+* avoid using ``toJS()`` function
+	* never use ``toJS()`` inside ``mapStateToProps``
+* never use Immutable.JS in your Dumb Components
+* use a Higher Order Component to convert your Smart Component’s Immutable.JS props to your Dumb Component’s JavaScript props
+* use the Immutable Object Formatter Chrome Extension to Aid Debugging
+
+## Reducers
+
+**Sources:**
+
+* [Beyond Combine Reducers](http://redux.js.org/docs/recipes/reducers/BeyondCombineReducers.html)
+
+Reducers can be easily combined so that each handles just one slice of state - Redux provides a function called ``combineReduers``.
+
+The ``combineReducers`` function has it's limitations:
+
+* each of the provided reducer functions will not have access to data outside the assigned slice of state
+* it works only with plain JavaScript object - it will not work if the state is defined as [``Immutable.js``](https://github.com/facebook/immutable-js) map
+
+### ``reduceReducer`` functions
+By calling ``reduceReducer`` reducer functions can organized in a pipeline, in which one reducer function will be called after the other, while the new state produced by one will be passed as current state to all the reducer functions that follow.
+
+### Reducers - See Also
+
+* [Redux Addons Catalog](https://github.com/markerikson/redux-ecosystem-links) - an on-line catalog of third-party reducers
+
+## Normalizing State Shape
+
+**Sources:**
+
+* [Splitting Up Reducer Logic](http://redux.js.org/docs/recipes/reducers/SplittingReducerLogic.html)
+* [Normalizing State Shape](http://redux.js.org/docs/recipes/reducers/NormalizingStateShape.html)
+* [Reusing Reducer Logic](http://redux.js.org/docs/recipes/reducers/ReusingReducerLogic.html)
+* [Initializing State](http://redux.js.org/docs/recipes/reducers/InitializingState.html)
+
+Relation data in our application should be stored in a normalized way, which means:
+
+* data shouldn't be nested
+* objects shouldn't refference each other
+
+This means the following:
+
+* each type of information should be stored in a separate state slice
+* each data element should be assigned an ID
+* instead of using refferences, data elements should refference other elements via ID
+
+The following snippet shows what a normalized data structure should look like:
+
+```javascript
+var state = {
+    posts : {
+        byId : {
+            "post1" : {
+                id : "post1",
+                author : "user1",
+                body : "......",
+                comments : ["comment1", "comment2"]
+            },
+            "post2" : {
+                id : "post2",
+                author : "user2",
+                body : "......",
+                comments : ["comment3"]
+            }
+        }
+        allIds : ["post1", "post2"]
+    },
+    comments : {
+        byId : {
+            "comment1" : {
+                id : "comment1",
+                author : "user2",
+                comment : ".....",
+            },
+            "comment2" : {
+                id : "comment2",
+                author : "user3",
+                comment : ".....",
+            },
+            "comment3" : {
+                id : "comment3",
+                author : "user3",
+                comment : ".....",
+            }
+        },
+        allIds : ["comment1", "comment2", "comment3", "commment4", "comment5"]
+    },
+    users : {
+        byId : {
+            "user1" : {
+                username : "user1",
+                name : "User 1",
+            },
+            "user2" : {
+                username : "user2",
+                name : "User 2",
+            }
+        },
+        allIds : ["user1", "user2", "user3"]
+    }
+}
+```
+
+### Reusing reducer functions
+
+There are a couple of patterns which define how a reducer function can be reused for different parts of state. These patterns are described in [Reusing Reducer Logic](http://redux.js.org/docs/recipes/reducers/ReusingReducerLogic.html).
+
+### Normalized state - See Also
+
+* [Normalizr](https://github.com/paularmstrong/normalizr) - a helper library which transforms non-normalized data in it's normalized form - typically used with a web service response, which returns nested data
 
 
 # ToDo
 
 Read the following:
-* http://reactkungfu.com/2015/08/pros-and-cons-of-using-immutability-with-react-js/
-* https://auth0.com/blog/intro-to-immutable-js/
-* http://redux.js.org/docs/recipes/reducers/ImmutableUpdatePatterns.html
 
+* SKUŽITI SLIJEDEĆE:
+	* http://redux.js.org/docs/recipes/UsingImmutableJS.html#use-a-higher-order-component-to-convert-your-smart-components-immutablejs-props-to-your-dumb-components-javascript-props
 
-* continue the tutorial from
-	* http://redux.js.org/docs/faq/ImmutableData.html
-	* http://redux.js.org/docs/recipes/StructuringReducers.html
+* https://www.youtube.com/watch?v=I7IdS-PbEgI
+* https://jaketrent.com/post/smart-dumb-components-react/
+* http://redux.js.org/docs/recipes/ComputingDerivedData.html
+* https://github.com/reactjs/reselect/#q-how-do-i-use-reselect-with-immutablejs
