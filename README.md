@@ -466,6 +466,12 @@ The end result is:
 * use a Higher Order Component to convert your Smart Component’s Immutable.JS props to your Dumb Component’s JavaScript props
 * use the Immutable Object Formatter Chrome Extension to Aid Debugging
 
+### Immutable.js & Reselect.js
+
+**Source:** [Q: How do I use Reselect with Immutable.js?](https://github.com/reactjs/reselect/#q-how-do-i-use-reselect-with-immutablejs)
+
+As stated in the source document, selectors created with ``createSelector`` should work just fine with ``Immutable.js`` data structures.
+
 ## Reducers
 
 **Sources:**
@@ -572,9 +578,4 @@ There are a couple of patterns which define how a reducer function can be reused
 * [Normalizr](https://github.com/paularmstrong/normalizr) - a helper library which transforms non-normalized data in it's normalized form - typically used with a web service response, which returns nested data
 
 # ToDo
-
-Read the following:
-* http://redux.js.org/docs/recipes/ComputingDerivedData.html
-
 * https://www.youtube.com/watch?v=I7IdS-PbEgI
-* https://github.com/reactjs/reselect/#q-how-do-i-use-reselect-with-immutablejs
