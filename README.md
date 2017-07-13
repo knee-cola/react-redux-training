@@ -578,4 +578,6 @@ There are a couple of patterns which define how a reducer function can be reused
 * [Normalizr](https://github.com/paularmstrong/normalizr) - a helper library which transforms non-normalized data in it's normalized form - typically used with a web service response, which returns nested data
 
 # ToDo
+
+Read the following:
 * https://www.youtube.com/watch?v=I7IdS-PbEgI
