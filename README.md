@@ -581,6 +581,10 @@ There are a couple of patterns which define how a reducer function can be reused
 
 ## Router & Redux
 
+**Sources:**
+* [How to sync Redux state and url hash tag params](https://stackoverflow.com/questions/36722584/how-to-sync-redux-state-and-url-hash-tag-params/36749963#36749963)
+* [react-router-redux](https://github.com/reactjs/react-router-redux)
+
 The question here is how a Router can be used with Redux. The simplest answer is **don't mix the two**, which means that Router is not aware of Redux and Redux is not aware of Router. Changes to the state have do not affect the router and changes to the route don't affect the state (no Actions get fired).
 
 The **net effect** of this that **the whole state is no longer stored in the Redux** - a part of it is stored in the Router.
@@ -593,7 +597,4 @@ In our soultion (counters) the app takes information from both sources:
 * from Redux
 	* in components to get the list of NavBar buttons which need to be rendered
 
-# ToDo
-
-Read the following:
-* https://www.youtube.com/watch?v=I7IdS-PbEgI
+To get some advanced features such as application rewind via [Redux DevTools](https://github.com/gaearon/redux-devtools) or changing the current location (URL) from the code, we can use [react-router-redux](https://github.com/reactjs/react-router-redux) middleware, which adds this functionality to the app.
