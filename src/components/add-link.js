@@ -5,7 +5,6 @@ import * as Actions from '../actions'
 const AddLink = ({onClick}) => (
 <a href="#" onClick={e => { e.preventDefault(); onClick(); }}>Add (+)</a>);
 
-
 const mapStateToProps = () => ({});
 
 const mapDispatchToProps = (dispatch, ownProps) => {

@@ -5,10 +5,7 @@ const path = require('path');
 
 // The [devPath] is the location in your dev server in which
 // you have installed the app.
-// The default location is "http://localhost/photo-sphere-browser/dist/"
-// If you used a different name for the project folder, you need
-// to update this string.
-const devPath = '/';
+const devPath = '/react-redux-training/dev/';
 
 // [prodPath] is path to the folder in which the app is located
 // on a production werb server. By default the app is expected to be placed
@@ -29,7 +26,7 @@ module.exports = {
 	// > Values listed here are used in [plugin] section, where we link subpages
 	//   to coresponding entry points - search for [excludeChunks] & [chunks]
 	entry: {
-		app: './src/app.js'
+		app: './src/index.js'
 	},
 	output: {
 		// here we need to set an absolute path - we're resolve path at runtime
@@ -43,7 +40,7 @@ module.exports = {
 	module: {
 		rules: [
 			{
-				// this [test] is applied to [require] statements in [app.js] file
+				// this [test] is applied to [require] statements in [index.js] file
 				// ... so CSS needs to be required from JavaScript in order for WebPack to procerss it
 				test: /\.scss$/,
 				use: ExtractTextPlugin.extract({
@@ -71,7 +68,7 @@ module.exports = {
 				]
 			},
 			{
-				// the following line makes webpack copy varius files required from app.js
+				// the following line makes webpack copy varius files required from index.js
 				// into the output folder
 				test: /\.(ashx|php|config|txt)$/i,
 				use: [

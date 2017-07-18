@@ -1,10 +1,8 @@
-const incrementCounter = () => ({
-	type: 'INCREMENT_COUNTER'
-});
-
-const setActiveCounter = (counterID) => ({
-	type: 'SET_ACTIVE_COUNTER',
-	counterID: counterID
+const incrementCounter = (counterID) => ({
+	type: 'INCREMENT_COUNTER',
+	payload: {
+		counterID: counterID
+	}
 });
 
 const addCounter = () => ({
@@ -12,4 +10,4 @@ const addCounter = () => ({
 });
 
 
-export { incrementCounter, setActiveCounter, addCounter };
+export { incrementCounter, addCounter };

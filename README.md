@@ -19,10 +19,12 @@ All milestones are commited to Git as separate commits, which means that each ve
 	* user should be able to select the active counter via the NavBar at the bottom
 * 4th **(done)** add support for adding new counters
 	* the footer should contain a "+" button via which the user can add new counters to the mix 
-* 5th add Router to the mix
+* 5th **(done)** add Router to the mix
 	* the app should have multiple counters: "A", "B", "C"
 	* each counter should be accessible via a separate route
 	* add a new Navbar component via which the user can change the route
+* 6th add use Immutable.js to the mix
+	* replace all the state variables with Immutable.js
 
 # References
 
@@ -576,6 +578,20 @@ There are a couple of patterns which define how a reducer function can be reused
 ### Normalized state - See Also
 
 * [Normalizr](https://github.com/paularmstrong/normalizr) - a helper library which transforms non-normalized data in it's normalized form - typically used with a web service response, which returns nested data
+
+## Router & Redux
+
+The question here is how a Router can be used with Redux. The simplest answer is **don't mix the two**, which means that Router is not aware of Redux and Redux is not aware of Router. Changes to the state have do not affect the router and changes to the route don't affect the state (no Actions get fired).
+
+The **net effect** of this that **the whole state is no longer stored in the Redux** - a part of it is stored in the Router.
+
+In our soultion (counters) the app takes information from both sources:
+
+* from Router
+	* in components to determin if a NavBar button is selected
+	* in container event handlers - to determin which counter to increment
+* from Redux
+	* in components to get the list of NavBar buttons which need to be rendered
 
 # ToDo
 
