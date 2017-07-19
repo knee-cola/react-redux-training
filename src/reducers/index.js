@@ -1,36 +1,40 @@
-const counterReducer = (state= {
-		counters:[]},
-	action) => {
+import {Map, List} from 'immutable';
+
+const counterReducer = (state = Map({
+			counters: List()
+		}),
+		action) => {
 	
 	const letters = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','W'];
+	let counters = state.get('counters'),
+		newCounters;
 	
 	switch(action.type) {
 		case 'INCREMENT_COUNTER':
+
+			let activeCounterID = action.payload.counterID;
 			
-			let activeCounter = state.counters.filter(el=>el.counterID===action.payload.counterID)[0];
-			let activeIx = state.counters.indexOf(activeCounter);
+			newCounters = counters.map(el => {
 
-			return(Object.assign({}, state,
-				{
-					counters: [
-						... state.counters.slice(0, activeIx),
-						Object.assign({}, activeCounter, {count: activeCounter.count+1}),
-						... state.counters.slice(activeIx+1)
-					]
-				}));
+				if(el.get('counterID')===activeCounterID) {
+				// IF we're looking at the counter which needs to be changed
+				// > increment it's value and return the new instance
+					return( el.set('count', el.get('count')+1) );
+				}
 
-			break;
+				return(el); // just return the previous instance
+			});
+
+			return(state.set('counters', newCounters));
+
 		case 'ADD_COUNTER':
-			return(Object.assign({}, state,
-				{
-					counters: [
-						... state.counters.slice(0, state.counters.length),
-						{ counterID:letters[state.counters.length],count:0 }
-					],
-					// set the new counter to be the active one
-					activeIx: state.counters.length
-				}));
-			break;
+
+			newCounters = counters.push(
+				Map({ counterID:letters[counters.count()],count:0 })
+			);
+
+			return(state.set('counters', newCounters));
+
 //		case 'SET_ACTIVE_COUNTER':
 //			let activeIx = state.counters.reduce((accumulator, el, ix)=> { if(action.counterID===el.counterID) { return(ix); } return(accumulator); }, -1);
 //			return(Object.assign({}, state, { activeIx: activeIx }));

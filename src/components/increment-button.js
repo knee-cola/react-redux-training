@@ -1,18 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types'
 
-const Counter = ({onClick, counterID, count}) => {
-	if(counterID!=='') {
+const IncrementButton = ({onClick, counterID}) => {
+	if(counterID!==null) {
 		return(<button onClick={onClick}>{counterID}++</button>);
 	} else {
 		return(null);
 	}
 };
 
-Counter.propTypes = {
+IncrementButton.propTypes = {
   onClick: PropTypes.func.isRequired,
-  counterID: PropTypes.string.isRequired,
-  count: PropTypes.number.isRequired 
+  counterID: PropTypes.string
 };
 
-export default Counter;
+export default IncrementButton;

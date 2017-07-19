@@ -23,7 +23,7 @@ All milestones are commited to Git as separate commits, which means that each ve
 	* the app should have multiple counters: "A", "B", "C"
 	* each counter should be accessible via a separate route
 	* add a new Navbar component via which the user can change the route
-* 6th add use Immutable.js to the mix
+* 6th **(done)** add use Immutable.js to the mix
 	* replace all the state variables with Immutable.js
 
 # References
