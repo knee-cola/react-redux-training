@@ -25,6 +25,15 @@ All milestones are commited to Git as separate commits, which means that each ve
 	* add a new Navbar component via which the user can change the route
 * 6th **(done)** add use Immutable.js to the mix
 	* replace all the state variables with Immutable.js
+* 7th load counters from a web service
+	* add a button "Load"
+	* web service should return a list of counters, containign only counter value (the counterID will be assigned dynamically)
+	* the button can be pressed multiple times - new counters are added each time
+	* **technical notes:**
+		* use thunk middleware fro async operation
+* 8th support counter removal
+	* add a "Remove" button, which removes the last counter in the list
+* 9th 
 
 # References
 
