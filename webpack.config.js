@@ -72,7 +72,7 @@ module.exports = {
 				// into the output folder
 				test: /\.(ashx|php|config|txt)$/i,
 				use: [
-					'file-loader?name=[name].[ext]?[hash]&publicPath=${appRootPath}&useRelativePath=true'
+					`file-loader?name=[name].[ext]?[hash]&publicPath=${appRootPath}&useRelativePath=false`
 				]
 			}
 		]

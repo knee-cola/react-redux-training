@@ -1,7 +1,8 @@
 import {Map, List} from 'immutable';
 
 const counterReducer = (state = Map({
-			counters: List()
+			counters: List(),
+			isFetching: false
 		}),
 		action) => {
 	
@@ -35,10 +36,22 @@ const counterReducer = (state = Map({
 
 			return(state.set('counters', newCounters));
 
-//		case 'SET_ACTIVE_COUNTER':
-//			let activeIx = state.counters.reduce((accumulator, el, ix)=> { if(action.counterID===el.counterID) { return(ix); } return(accumulator); }, -1);
-//			return(Object.assign({}, state, { activeIx: activeIx }));
-//			break;
+		case 'FETCH_COUNTERS_REQUEST':
+			return(state.set('isFetching', true));
+
+		case 'FETCH_COUNTERS_SUCCESS':
+
+			let i = counters.count();
+
+			// converting data received over wire to [Map] object + adding [counterID]
+			newCounters = action.payload.counters.map(el => Map({
+				counterID:letters[i++],
+				count:el.count
+			}));
+
+			return(state
+					.set('counters', counters.concat(newCounters))
+					.set('isFetching', false));
 		default:
 			return(state);
 	};

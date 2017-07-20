@@ -7,7 +7,7 @@ This README file contins notes written down during this dangerous and exciting a
 ead. Long Live Composition
 # Milestones
 
-All milestones are commited to Git as separate commits, which means that each version can checked-out.
+All milestones are commited to Git and tagged, which means that each version can checked-out.
 
 * 1st **(done)** create a **simple React app**
 	* app should be sa simple counter
@@ -25,7 +25,7 @@ All milestones are commited to Git as separate commits, which means that each ve
 	* add a new Navbar component via which the user can change the route
 * 6th **(done)** add use Immutable.js to the mix
 	* replace all the state variables with Immutable.js
-* 7th load counters from a web service
+* 7th **(done)** load counters from a web service
 	* add a button "Load"
 	* web service should return a list of counters, containign only counter value (the counterID will be assigned dynamically)
 	* the button can be pressed multiple times - new counters are added each time
@@ -70,7 +70,7 @@ function genericMiddlewareFunction(state) {
 	// which needs be called in order for the
 	// processing to continue - we can terminate
 	// action processing by not calling it
-		return function(next) {
+	return function(next) {
 
 		// [action] = action which was dispatched
 		return function(action) {
@@ -99,6 +99,7 @@ const store = createStore(
 Sources:
 
 * [Redux Async Actions](http://redux.js.org/docs/basics/Actions.html)
+* [Async Actions](http://redux.js.org/docs/advanced/AsyncActions.html)
 * [Redux Middleware Tutorial - Redux Tutorial #5](https://www.youtube.com/watch?v=DJ8fR0mZM44)
 * [Redux Async Actions - Redux Tutorial #6](https://www.youtube.com/watch?v=Td-2D-_7Y2E)
 * [How to dispatch a Redux action with a timeout?](https://stackoverflow.com/questions/35411423/how-to-dispatch-a-redux-action-with-a-timeout/35415559#35415559)
@@ -122,7 +123,7 @@ The answer to both of these questions is: all of this is done from an new type o
 
 Regular action creation functions usually doesn't contain any logic - their job is to create and return a new action object.
 
-Thunk action creator functions, instead of creating of returning a new action object, return a **new function**. There are two important sacts about this new function:
+Thunk action creator functions, instead of creating of returning a new action object, return a **new function**. There are two important facts about this new function:
 
 * it defines a new API, which is different from the one regular action creator function use
 	* it has a single param ``dispatch``, through which it's passed the refference to the dispatch function
