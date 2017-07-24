@@ -22,6 +22,7 @@ const fetchCounters = () => (dispatch) => {
 	dispatch(requestCounters());
 
 	// returning a promise created by calling [fetch]
+	// > the Promise can be used if needed (i.e. if this action is used within another action)
 	return fetch(require('../fetchCounters.ashx'))
 		// converting response to JSON
 		.then(response => response.json())

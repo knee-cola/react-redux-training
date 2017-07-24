@@ -31,9 +31,12 @@ All milestones are commited to Git and tagged, which means that each version can
 	* the button can be pressed multiple times - new counters are added each time
 	* **technical notes:**
 		* use thunk middleware fro async operation
-* 8th support counter removal
-	* add a "Remove" button, which removes the last counter in the list
-* 9th 
+* 8th add paging support
+	* only 5 counters are to be displayed in the navigation bar
+	* add "<" and ">" buttons to scroll through the counter list
+		* scroll step size is one counter (one click on the ">" moves the list by one item)
+	* when the end (or beginning) of the list is reached, the ">" (or "<") button should be disabled
+		* check should be built into the reducer which will ensure that the list isn't scrolled beyond end/beginning
 
 # References
 
