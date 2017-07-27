@@ -38,7 +38,30 @@ All milestones are commited to Git and tagged, which means that each version can
 	* when the end (or beginning) of the list is reached, the ">" (or "<") button should be disabled
 		* check should be built into the reducer which will ensure that the list isn't scrolled beyond end/beginning
 
-# References
+# Data Structure
+
+The following code block shows the data structure used by this project. It is shaped according to the advice given in [Normalizing State Shape](http://redux.js.org/docs/recipes/reducers/NormalizingStateShape.html)
+
+	{
+		// flag indicating if the fetch operation
+		// is currently under way
+		isFetching: false,
+
+		// start index of the visible part
+		// of the counter list - used for
+		// scrolling through the list
+		listStartIx: 0
+
+		// a list of all the counters
+		counters: List([
+			Map({ counterID:"A", count:0 }),
+			Map({ counterID:"B", count:3 }),
+			Map({ counterID:"C", count:6 }),
+			Map({ counterID:"D", count:8 })
+		])
+	}
+
+# Notes
 
 The following documentation was studied during the execution of this training:
 
@@ -52,7 +75,6 @@ Here's a list of articles which might be interesting to read:
 * [Getting Started with Redux](https://egghead.io/courses/getting-started-with-redux) - video tutorial series
 * [The case for Flux](https://medium.com/swlh/the-case-for-flux-379b7d1982c6) - explaining the benefits of Flux style of managing data (applicable also to Redux)
 
-# Notes
 ## Redux Middleware
 
 Middleware is a way to tap into the action processing pipeline. Actions are processed in the following stages:
